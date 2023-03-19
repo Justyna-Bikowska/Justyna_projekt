@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<title>
+   Analiza rezerwy mocy w KSE
+  </title>
+<link href="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text y=%22.9em%22 font-size=%2290%22&gt;📊&lt;/text&gt;&lt;/svg&gt;" rel="icon"/>
+<!-- Meta tags -->
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+<!-- Bootstrap CSS and JavaScript Dependencies -->
+<link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css" integrity="sha512-GQGU0fMMi238uA+a/bdWJfpUGKUkBdgfFdgBm72SUQ6BeyWjoY/ton0tEjH+OSH9iP4Dfh+7HM0I9f5eR0L/4w==" referrerpolicy="no-referrer" rel="stylesheet"/>
+<!-- Esparto CSS -->
+<style>
+   body {
+    font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif, system-ui, -apple-system, BlinkMacSystemFont;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+.es-page-title,
+.es-section-title,
+.es-row-title,
+.es-column-title,
+.es-card-title {
+    margin-top: 0.75em;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0.5em;
+}
+
+.es-page-title {
+    font-size: 3.5em;
+    font-weight: 300;
+    margin-left: -0.1em;
+}
+
+h1 {
+    font-size: 2em;
+}
+
+h2,
+.es-section-title {
+    font-size: 1.5em;
+}
+
+h3,
+.es-row-title,
+.es-column-title,
+.es-card-title {
+    font-size: 1.2em;
+}
+
+h4 {
+    font-size: 1em;
+}
+
+h5 {
+    font-size: 1em;
+}
+
+h6 {
+    font-size: 0.9em;
+}
+
+p {
+    margin-top: 0.25em;
+    margin-bottom: 0.25em;
+}
+
+a:link {
+    text-decoration: none;
+}
+
+a:visited {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+a:active {
+    text-decoration: none;
+}
+
+.es-figure {
+    text-align: center;
+    margin: 0;
+    padding: 0.5rem;
+    padding-bottom: 1rem;
+}
+
+.es-matplotlib-figure,
+.es-bokeh-figure,
+.es-plotly-figure {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: auto;
+    margin: auto;
+    margin-bottom: 1rem;
+}
+
+.es-page-body {
+    margin: auto;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.es-section-body {
+    margin-bottom: 1rem;
+    padding-left: 1px;
+    padding-right: 1px;
+    align-items: flex-start;
+}
+
+.es-row-body {
+    align-items: flex-start;
+}
+
+.es-column-body {
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+}
+
+.es-card {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+}
+
+.es-card-title {
+    margin: 0;
+}
+
+.es-card-body {
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    margin: 0;
+    padding: 1.25rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    min-height: 100%;
+}
+
+.es-page-break {
+    page-break-after: always;
+}
+
+.es-table {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+}
+
+.es-table td,
+.es-table th {
+    padding: 0 !important;
+    padding-left: 0.3rem !important;
+    padding-right: 0.3rem !important;
+    text-align: right;
+}
+
+.svg-content-mpl {
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    bottom: 0px;
+    margin: auto;
+}
+
+.es-icon {
+    margin: 0.5em;
+    margin-left: 1em;
+    margin-right: 1em;
+    font-size: 1.8em;
+    color: var(--bs-gray-700) !important;
+    fill: var(--bs-gray-700) !important;
+    height: 0.9em;
+    width: 0.9em;
+}
+
+.es-icon:hover,
+.es-icon:focus {
+    cursor: pointer;
+    color: var(--bs-primary) !important;
+    fill: var(--bs-primary) !important;
+}
+
+@media print {
+
+    .es-page-title,
+    .es-section-title,
+    .es-row-title,
+    .es-column-title {
+        page-break-after: avoid;
+    }
+
+    .es-row-body,
+    .es-column-body,
+    .es-card {
+        page-break-inside: avoid;
+    }
+
+    .es-section-body {
+        page-break-after: always;
+    }
+
+    .es-column-body,
+    .es-card,
+    .es-card-body {
+        flex: 1 !important;
+    }
+}
+  </style>
+</head>
+<body>
+<!-- Header -->
+<nav class="navbar d-flex navbar-expand-md navbar-light bg-secondary mb-3 d-print-none" style="padding: 0; min-height: 1.2rem; --bs-bg-opacity: .1;" width="100vw">
+<a class="navbar-brand" href="#" style="margin-left: 10vw; padding: 0; font-size: 1rem;">
+</a>
+</nav>
+<!-- Content -->
+<main class="container" style="min-height: 100vh;">
+<article class="es-page-body" id="analiza_rezerwy_mocy_w_kse" style="max-width: 800px">
+<h1 class="es-page-title" id="analiza_rezerwy_mocy_w_kse-title">
+     Analiza rezerwy mocy w KSE
+    </h1>
+<section class="es-section-body" id="analiza_rezerwy_mocy_w_kse">
+<h3 class="es-section-title" id="analiza_rezerwy_mocy_w_kse-title">
+      Analiza rezerwy mocy w KSE
+     </h3>
+<div class="row es-row-body" id="opis_analizy">
+<h5 class="col-12 es-row-title" id="opis_analizy-title">
+       Opis analizy
+      </h5>
+<div class="col-lg es-column-body" id="es-column">
+<div class="es-markdown">
+<p>
+         Analiza przedstawia poziom napiwkow
+        </p>
+</div>
+</div>
+</div>
+</section>
+</article>
+</main>
+<!-- Footer -->
+<footer class="footer d-flex justify-content-center d-print-none" width="100vw">
+<div class="btn-group px-2 mt-5 mb-4" role="group">
+<a aria-label="Esparto Project Page" class="es-icon" href="https://domvwt.github.io/esparto/" title="Esparto Project Page">
+<svg class="bi bi-file-earmark-bar-graph" id="es-link-button" role="button" style="display: block;" viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+<path d="M10 13.5a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-6a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v6zm-2.5.5a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1zm-3 0a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-1z">
+</path>
+<path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z">
+</path>
+</svg>
+</a>
+<a aria-label="Share Document" title="Share Document">
+<svg class="es-icon bi bi-share" id="share-button" role="button" style="display: none;" viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+<path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z">
+</path>
+</svg>
+</a>
+<a aria-label="Print Document" title="Print Document">
+<svg class="es-icon bi bi-printer" id="print-button" role="button" style="display: block;" viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+<path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z">
+</path>
+<path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V3zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2H5zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1z">
+</path>
+</svg>
+</a>
+</div>
+</footer>
+<!-- JavaScript -->
+
+<script type="text/javascript">
+   // Convert document to text file.
+const getDocumentFile = function () {
+  let filename = document.title + ".html"
+  let docString = new XMLSerializer().serializeToString(document)
+  return new File([docString], filename, { type: "text/html" })
+}
+
+const share_button = document.getElementById('share-button');
+
+// Only show share button if web share API is supported.
+if (navigator.canShare) {
+  share_button.style.display = "block";
+} else {
+  console.log("Web Share API not supported.")
+}
+
+// Share must be triggered by "user activation".
+share_button.addEventListener('click', async () => {
+  try {
+    let docFile = getDocumentFile()
+    let shareData = { files: [docFile] }
+    await navigator.share(shareData)
+  } catch (err) {
+    alert(`Error while sharing document:\n${err}`)
+  }
+});
+
+
+const print_button = document.getElementById('print-button')
+
+print_button.addEventListener('click', () => {
+  window.print()
+});
+  </script></body>
+</html>
